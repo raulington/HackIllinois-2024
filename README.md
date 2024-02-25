@@ -1,17 +1,16 @@
 # hackillinois-app
 
-An Electron application with Vue and TypeScript
-
-## Recommended IDE Setup
-
-- [VSCode](https://code.visualstudio.com/) + [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint) + [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin)
+An Electron application with Vue and TypeScript that takes a Python codebase and creates a PDF with generated documentation.
 
 ## Project Setup
 
 ### Install
 
+Install Python and use pip to install the dependencies listed under requirements.txt
+
 ```bash
 $ npm install
+$ pip install -r requirements.txt
 ```
 
 ### Development

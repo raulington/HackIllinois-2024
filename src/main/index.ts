@@ -3,7 +3,7 @@ import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
 import { spawn } from 'child_process'
-import { l } from 'vite/dist/node/types.d-jgA8ss1A'
+import fs from 'fs'
 
 function createWindow(): void {
   // Create the browser window.
@@ -66,10 +66,11 @@ app.whenReady().then(() => {
   ipcMain.on('generate', (event, input_dir, output_dir, functions, methods) => {
     console.log("Generation called!");
     console.log(input_dir);
-    console.log(output_dir);
+    console.log(output_dir + "/docs.pdf");
     console.log(functions);
     console.log(methods);
-    const python = spawn('python', [join(__dirname, '../build/doc.py'), input_dir, output_dir, functions, methods]);
+    console.log(join(__dirname, '../../backend/doc.py'));
+    const python = spawn('python', [join(__dirname, '..', '..','backend','doc.py'), input_dir, join(output_dir,"docs.pdf"), functions, methods]);
     python.stdout.on('data', data => console.log('data : ', data.toString()))
     python.on('close', ()=>{
       console.log("Generation complete!");

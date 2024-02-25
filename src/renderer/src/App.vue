@@ -59,7 +59,7 @@
         </div>
         <div class="generate">
           <button class="overlap-group-3" @click="generate">
-            <div class="text-wrapper-7">Generate</div>
+            <div class="text-wrapper-7">{{ gen_text }}</div>
           </button>
         </div>
       </div>
