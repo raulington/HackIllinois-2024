@@ -1,4 +1,5 @@
 import os
+import sys
 import ast
 from transformers import AutoTokenizer, AutoModelForSeq2SeqLM
 from reportlab.lib.pagesizes import letter
@@ -139,8 +140,16 @@ def main(main_directory_path, output, process_func=True, process_method=True):
     c.showPage()
     c.save()
 
-# ./data
-#./sp23_cs340_rauldh2/mp8
-# directory_path = './sp23_cs340_rauldh2/mp9'
-# output_pdf = 'generated_docs.pdf'
-# main(directory_path, output_pdf)
+if len(sys.argv) != 3:
+        print("Usage: python doc.py <INPUT_DIRECTORY> <OUTPUT_DIRECTORY>")
+        sys.exit(1)
+
+input_directory = sys.argv[1]
+output_pdf = sys.argv[2]
+
+# Validate input directory
+if not os.path.isdir(input_directory):
+    print(f"The specified input directory does not exist: {input_directory}")
+    sys.exit(1)
+
+main(input_directory, output_pdf)
