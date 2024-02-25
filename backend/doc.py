@@ -143,7 +143,7 @@ def main(main_directory_path, output, process_func=True, process_method=True):
 def str_to_bool(value):
     return value.lower() in ("yes", "true", "t", "1")
 
-if len(sys.argv) != 3:
+if len(sys.argv) < 3:
         print("Usage: python doc.py <INPUT_DIRECTORY> <OUTPUT_DIRECTORY>")
         sys.exit(1)
 
