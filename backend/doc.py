@@ -3,22 +3,13 @@ import ast
 from transformers import AutoTokenizer, AutoModelForSeq2SeqLM
 from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
-from reportlab.lib.pagesizes import A4
-from reportlab.lib.styles import ParagraphStyle
-from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, PageBreak
 
 model_name = 'SEBIS/code_trans_t5_small_code_documentation_generation_python'
 tokenizer = AutoTokenizer.from_pretrained(model_name)
 model = AutoModelForSeq2SeqLM.from_pretrained(model_name)
-width, height = A4
-x = width / 2
-y = height / 2
-
-style = ParagraphStyle(
-        name='Normal',
-    )
 
 class CodeVisitor(ast.NodeVisitor):
+    # Parses code for functions and class methods
     def __init__(self):
         self.classes = []
         self.functions = []
@@ -41,6 +32,7 @@ def read_functions(node):
     return ast.unparse(node)
 
 def generate_documentation(code):
+    # Runs the model on input code
     inputs = tokenizer(code, return_tensors="pt", max_length=512, truncation=True, padding="max_length")
     summary_ids = model.generate(inputs['input_ids'], max_length=300, length_penalty=2.0, early_stopping=True)
     documentation = tokenizer.decode(summary_ids[0], skip_special_tokens=True)
@@ -48,10 +40,10 @@ def generate_documentation(code):
 
 
 def walk_dir(directory):
-    # Convert this to a recursive function that reads in directories and files
+    # Recursive function that walks through directories and files of root dir
     for root, other_dirs, files in os.walk(directory):
         yield f'{root}', "", "Dir"   
-        
+
         for file in files:
             if file.endswith(".py"):
                 with open(os.path.join(root, file), 'r', encoding='utf-8') as f:
@@ -61,6 +53,7 @@ def walk_dir(directory):
             
 
 def write_textobj(c, textobject, line, space, x=40,y_offset=750, bottom_margin=50):
+    # Writes to the pdf text object
     if (textobject.getY() < bottom_margin):
         c.drawText(textobject)
         c.showPage()
@@ -77,11 +70,10 @@ def write_textobj(c, textobject, line, space, x=40,y_offset=750, bottom_margin=5
 def main(main_directory_path, output, process_func=True, process_method=True):
     # Set up the PDF file for output
     c = canvas.Canvas(output, pagesize=letter)
-    textobject = c.beginText(40, 750)  # Start near the top of a letter-sized page
+    textobject = c.beginText(40, 750)
     textobject.setFont("Times-Roman", 12)
     for name, code, doc_type in walk_dir(main_directory_path):
         if doc_type == "File":
-
             textobject.setFont("Times-Bold", 12)
             textobject=write_textobj(c, textobject, f'File: {name}', "    ")
             textobject.setFont("Times-Roman", 12)
@@ -93,17 +85,15 @@ def main(main_directory_path, output, process_func=True, process_method=True):
                 textobject=write_textobj(c, textobject, line, "    ")
             
             if (process_func):
-                # User wants to process the functions too
+                # Generate documentation of the functions
                 tree = ast.parse(code)
                 visitor = CodeVisitor()
                 assign_parents(tree)
                 visitor.visit(tree)
 
                 for func in visitor.functions:
-                    # Generate documentation for the function signature and body
                     func_code = read_functions(func)
                     documentation = generate_documentation(func_code)
-                    # Add the function signature and its generated documentation to the PDF
                     textobject.setFont("Times-Bold", 12)
                     textobject=write_textobj(c, textobject, f'• Function: {func.name}', "        ")
                     textobject.setFont("Times-Roman", 12)
@@ -115,7 +105,7 @@ def main(main_directory_path, output, process_func=True, process_method=True):
 
             # Document classes and their methods
             for cls in visitor.classes:
-                cls_code = read_functions(cls)  # Using the same function for simplicity
+                cls_code = read_functions(cls)
                 documentation = generate_documentation(cls_code)
                 textobject.setFont("Times-Bold", 12)
                 textobject=write_textobj(c, textobject, f'Class: {cls.name}', "    ")
@@ -136,9 +126,7 @@ def main(main_directory_path, output, process_func=True, process_method=True):
 
                         for line in documentation.split('\n'):
                             textobject=write_textobj(c, textobject, line, "               ")
-
                 textobject.textLine('')
-            
             textobject.textLine('')
         else:
             textobject=write_textobj(c, textobject, "------------------------------------","")
@@ -153,6 +141,6 @@ def main(main_directory_path, output, process_func=True, process_method=True):
 
 # ./data
 #./sp23_cs340_rauldh2/mp8
-directory_path = './sp23_cs340_rauldh2/mp9'
-output_pdf = 'generated_docs.pdf'
-main(directory_path, output_pdf)
+# directory_path = './sp23_cs340_rauldh2/mp9'
+# output_pdf = 'generated_docs.pdf'
+# main(directory_path, output_pdf)
