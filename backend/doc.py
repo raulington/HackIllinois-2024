@@ -140,6 +140,9 @@ def main(main_directory_path, output, process_func=True, process_method=True):
     c.showPage()
     c.save()
 
+def str_to_bool(value):
+    return value.lower() in ("yes", "true", "t", "1")
+
 if len(sys.argv) != 3:
         print("Usage: python doc.py <INPUT_DIRECTORY> <OUTPUT_DIRECTORY>")
         sys.exit(1)
@@ -147,9 +150,16 @@ if len(sys.argv) != 3:
 input_directory = sys.argv[1]
 output_pdf = sys.argv[2]
 
+process_func = True
+process_method = True
+if len(sys.argv) > 3:
+    process_func = str_to_bool(sys.argv[3])
+if len(sys.argv) > 4:
+    process_method = str_to_bool(sys.argv[4])
+
 # Validate input directory
 if not os.path.isdir(input_directory):
     print(f"The specified input directory does not exist: {input_directory}")
     sys.exit(1)
 
-main(input_directory, output_pdf)
+main(input_directory, output_pdf, process_method, process_func)

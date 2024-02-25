@@ -265,9 +265,10 @@ export default defineComponent({
   flex: 0 0 auto;
   gap: 8px;
   overflow: hidden;
-  padding: 12px 16px;
+  padding: 16px;
   position: relative;
-  width: 80;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .frame .text-wrapper-4 {
@@ -391,5 +392,7 @@ html, body {
 .form {
   width: 40;
   size: 5;
+  border: 2px solid #ccc; /* Subtle border color */
+  transition: border-color 0.3s; /* Smooth transition for focus */
 }
 </style>
