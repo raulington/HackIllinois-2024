@@ -12,8 +12,8 @@ function createWindow(): void {
     // height: 551,
     autoHideMenuBar: true,
     resizable: false,
-    backgroundColor: "6e679b",
-    
+    backgroundColor: '6e679b',
+
     ...(process.platform === 'linux' ? { icon } : {}),
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),

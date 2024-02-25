@@ -1,9 +1,3 @@
-<script setup lang="ts">
-import Versions from './components/Versions.vue'
-
-const ipcHandle = () => window.electron.ipcRenderer.send('ping')
-</script>
-
 <template>
   <div class="frame">
     <div class="overlap-wrapper">
@@ -15,37 +9,47 @@ const ipcHandle = () => window.electron.ipcRenderer.send('ping')
             <div class="methods">
               <div class="overlap-group-2">
                 <div class="text-wrapper-2">Methods</div>
-                <input class="addition-options-checkbox" type="checkbox" id="methods" v-model="methods_checked" />
+                <input
+                  id="methods"
+                  v-model="methods_checked"
+                  class="addition-options-checkbox"
+                  type="checkbox"
+                />
               </div>
             </div>
             <div class="functions">
               <div class="overlap-group-2">
                 <div class="text-wrapper-2">Functions</div>
-                <input class="addition-options-checkbox" type="checkbox" id="functions" v-model="functions_checked" />
+                <input
+                  id="functions"
+                  v-model="functions_checked"
+                  class="addition-options-checkbox"
+                  type="checkbox"
+                />
               </div>
             </div>
           </div>
           <div class="output">
             <div class="overlap-group-wrapper">
-              <div class="div-wrapper">
+              <button class="div-wrapper" @click="file_explorer(1)">
                 <div class="text-wrapper-3">Select Output</div>
-              </div>
+              </button>
             </div>
             <div class="div-wrapper-2">
               <div class="div-wrapper-3">
-                <input class="form" v-model="output_dir_path">
+                <input v-model="output_dir_path" class="form" />
               </div>
             </div>
           </div>
           <div class="input">
             <div class="overlap-group-wrapper">
-              <div class="div-wrapper">
+              <button class="div-wrapper" @click="file_explorer(0)">
                 <div class="text-wrapper-5">Select Input</div>
-              </div>
+              </button>
             </div>
             <div class="div-wrapper-2">
               <div class="div-wrapper-3">
-                <input class="form" v-model="input_dir_path">
+                <input v-model="input_dir_path" class="form" />
               </div>
             </div>
           </div>
@@ -54,9 +58,9 @@ const ipcHandle = () => window.electron.ipcRenderer.send('ping')
           <div class="text-wrapper-6">DocPDFGen</div>
         </div>
         <div class="generate">
-          <div class="overlap-group-3">
-            <button class="text-wrapper-7" @click="test">GENERATE</button>
-          </div>
+          <button class="overlap-group-3" @click="generate">
+            <div class="text-wrapper-7">Generate</div>
+          </button>
         </div>
       </div>
     </div>
@@ -64,29 +68,37 @@ const ipcHandle = () => window.electron.ipcRenderer.send('ping')
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent } from 'vue'
+import { dialog } from 'electron'
 
 export default defineComponent({
-  name: "Frame",
+  name: `'App'`,
   data() {
     return {
-      input_dir_path: "",
-      output_dir_path: "",
+      input_dir_path: '',
+      output_dir_path: '',
       methods_checked: null,
-      functions_checked: null,
+      functions_checked: null
     }
   },
   methods: {
-    test(event) {
-      alert("Test called");
-      this.methods_checked === true;
-      this.functions_checked === true;
-      console.log(this.input_dir_path);
-      console.log(this.output_dir_path);
+    generate() {
+      this.methods_checked === true
+      this.functions_checked === true
+      console.log(this.input_dir_path)
+      console.log(this.output_dir_path)
+    },
+    file_explorer(type) {
+      this.input_dir_path = 'Input!'
+      this.output_dir_path = 'Output!'
+      if (type === 0) {
+        // this.input_dir_path = dialog.showOpenDialogSync({ properties: ['openDirectory'] });
+      } else {
+        // this.output_dir_path = dialog.showOpenDialogSync({ properties: ['openDirectory'] });
+      }
     }
   }
-});
-
+})
 </script>
 
 <style>
@@ -122,7 +134,7 @@ export default defineComponent({
 
 .frame .text-wrapper {
   color: #ffffff;
-  font-family: "Inter-Regular", Helvetica;
+  font-family: 'Inter-Regular', Helvetica;
   font-size: 24px;
   font-weight: 400;
   left: 112px;
@@ -134,7 +146,7 @@ export default defineComponent({
 
 .frame .div {
   color: #ffffff;
-  font-family: "Inter-Regular", Helvetica;
+  font-family: 'Inter-Regular', Helvetica;
   font-size: 24px;
   font-weight: 400;
   left: 110px;
@@ -170,7 +182,7 @@ export default defineComponent({
 
 .frame .text-wrapper-2 {
   color: #ffffff;
-  font-family: "Inter-ExtraBold", Helvetica;
+  font-family: 'Inter-ExtraBold', Helvetica;
   font-size: 16px;
   font-weight: 800;
   height: 31px;
@@ -229,7 +241,7 @@ export default defineComponent({
 
 .frame .text-wrapper-3 {
   color: #ebc2ff;
-  font-family: "Inter-Bold", Helvetica;
+  font-family: 'Inter-Bold', Helvetica;
   font-size: 15px;
   font-weight: 700;
   height: 30px;
@@ -274,7 +286,7 @@ export default defineComponent({
 .frame .text-wrapper-4 {
   color: #000000;
   flex: 1;
-  font-family: "Inter-Italic", Helvetica;
+  font-family: 'Inter-Italic', Helvetica;
   font-size: 15px;
   font-style: italic;
   font-weight: 400;
@@ -295,7 +307,7 @@ export default defineComponent({
 
 .frame .text-wrapper-5 {
   color: #ebc2ff;
-  font-family: "Inter-Bold", Helvetica;
+  font-family: 'Inter-Bold', Helvetica;
   font-size: 15px;
   font-weight: 700;
   height: 23px;
@@ -320,7 +332,7 @@ export default defineComponent({
 
 .frame .text-wrapper-6 {
   color: #f6eaf8;
-  font-family: "Inter-ExtraBold", Helvetica;
+  font-family: 'Inter-ExtraBold', Helvetica;
   font-size: 40px;
   font-weight: 800;
   left: 94px;
@@ -349,7 +361,7 @@ export default defineComponent({
 
 .frame .text-wrapper-7 {
   color: #581677;
-  font-family: "Inter-Bold", Helvetica;
+  font-family: 'Inter-Bold', Helvetica;
   font-size: 20px;
   font-weight: 700;
   height: 23px;
@@ -372,7 +384,8 @@ export default defineComponent({
   overflow: hidden;
 }
 
-html, body {
+html,
+body {
   background-color: #6e679b;
   margin: 0;
   padding: 0;
@@ -390,9 +403,15 @@ html, body {
 }
 
 .form {
-  width: 40;
-  size: 5;
+  width: 95%;
   border: 2px solid #ccc; /* Subtle border color */
   transition: border-color 0.3s; /* Smooth transition for focus */
+}
+
+.button {
+  background: transparent !important;
+  visibility: hidden;
+  border: none !important;
+  font-size: 0;
 }
 </style>
