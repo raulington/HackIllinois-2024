@@ -68,36 +68,38 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
-import { dialog } from 'electron'
+import { defineComponent } from 'vue';
 
 export default defineComponent({
-  name: `'App'`,
+  name: `'app'`,
   data() {
     return {
       input_dir_path: '',
       output_dir_path: '',
-      methods_checked: null,
-      functions_checked: null
+      methods_checked: false,
+      functions_checked: false,
+      gen_text: 'Generate',
     }
+  },
+  mounted() {
+    window.electron.ipcRenderer.on('file_path', (event, type, path) => {
+      if (type === 0) {
+        this.input_dir_path = path;
+      } else {
+        this.output_dir_path = path;
+      }
+      this.gen_text = 'Generate';
+    });
   },
   methods: {
     generate() {
-      this.methods_checked === true
-      this.functions_checked === true
-      console.log(this.input_dir_path)
-      console.log(this.output_dir_path)
+      window.electron.ipcRenderer.send('generate', this.input_dir_path, this.output_dir_path, this.functions_checked, this.methods_checked);
+      this.gen_text = 'Generating...';
     },
     file_explorer(type) {
-      this.input_dir_path = 'Input!'
-      this.output_dir_path = 'Output!'
-      if (type === 0) {
-        // this.input_dir_path = dialog.showOpenDialogSync({ properties: ['openDirectory'] });
-      } else {
-        // this.output_dir_path = dialog.showOpenDialogSync({ properties: ['openDirectory'] });
-      }
+      window.electron.ipcRenderer.send('file_open', type);
     }
-  }
+  },
 })
 </script>
 

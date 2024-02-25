@@ -1,21 +1,22 @@
-import { app, shell, BrowserWindow, ipcMain } from 'electron'
+import { app, shell, dialog, BrowserWindow, ipcMain, ipcRenderer } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
+import { spawn } from 'child_process'
+import { l } from 'vite/dist/node/types.d-jgA8ss1A'
 
 function createWindow(): void {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
     show: false,
     useContentSize: true,
-    // width: 474,
-    // height: 551,
     autoHideMenuBar: true,
     resizable: false,
     backgroundColor: '6e679b',
 
     ...(process.platform === 'linux' ? { icon } : {}),
     webPreferences: {
+      nodeIntegration: true,
       preload: join(__dirname, '../preload/index.js'),
       sandbox: false
     }
@@ -53,11 +54,29 @@ app.whenReady().then(() => {
     optimizer.watchWindowShortcuts(window)
   })
 
-  // IPC test
-  ipcMain.on('ping', () => console.log('pong'))
-
   createWindow()
-
+  
+  ipcMain.on('file_open', (event, type) => {
+    dialog.showOpenDialog({ properties: ['openDirectory'] }).then((path) => {
+      console.log(path.filePaths[0]);
+      event.sender.send('file_path', type, path.filePaths[0]);
+    })
+  })
+  
+  ipcMain.on('generate', (event, input_dir, output_dir, functions, methods) => {
+    console.log("Generation called!");
+    console.log(input_dir);
+    console.log(output_dir);
+    console.log(functions);
+    console.log(methods);
+    const python = spawn('python', [join(__dirname, '../build/doc.py'), input_dir, output_dir, functions, methods]);
+    python.stdout.on('data', data => console.log('data : ', data.toString()))
+    python.on('close', ()=>{
+      console.log("Generation complete!");
+      event.sender.send('completion');
+    })
+  })
+  
   app.on('activate', function () {
     // On macOS it's common to re-create a window in the app when the
     // dock icon is clicked and there are no other windows open.

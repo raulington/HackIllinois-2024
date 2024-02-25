@@ -1,6 +1,5 @@
 torch
 transformers
 reportlab
-ast
 sentencepiece
 protobuf
