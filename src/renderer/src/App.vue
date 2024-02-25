@@ -15,16 +15,13 @@ const ipcHandle = () => window.electron.ipcRenderer.send('ping')
             <div class="methods">
               <div class="overlap-group-2">
                 <div class="text-wrapper-2">Methods</div>
-                <div class="rectangle" />
+                <input class="addition-options-checkbox" type="checkbox" id="methods" v-model="methods_checked" />
               </div>
             </div>
             <div class="functions">
               <div class="overlap-group-2">
                 <div class="text-wrapper-2">Functions</div>
-                <div class="rectangle">
-                <input type="checkbox" id="checkbox" v-model="checked" />
-<label for="checkbox">{{ checked }}</label>
-                </div>
+                <input class="addition-options-checkbox" type="checkbox" id="functions" v-model="functions_checked" />
               </div>
             </div>
           </div>
@@ -36,7 +33,7 @@ const ipcHandle = () => window.electron.ipcRenderer.send('ping')
             </div>
             <div class="div-wrapper-2">
               <div class="div-wrapper-3">
-                <div class="text-wrapper-4">Output Directory Path</div>
+                <input class="form" v-model="output_dir_path">
               </div>
             </div>
           </div>
@@ -48,7 +45,7 @@ const ipcHandle = () => window.electron.ipcRenderer.send('ping')
             </div>
             <div class="div-wrapper-2">
               <div class="div-wrapper-3">
-                <input type="text" id="myTextField" name="myTextField">
+                <input class="form" v-model="input_dir_path">
               </div>
             </div>
           </div>
@@ -58,7 +55,7 @@ const ipcHandle = () => window.electron.ipcRenderer.send('ping')
         </div>
         <div class="generate">
           <div class="overlap-group-3">
-            <div class="text-wrapper-7">GENERATE</div>
+            <button class="text-wrapper-7" @click="test">GENERATE</button>
           </div>
         </div>
       </div>
@@ -71,7 +68,25 @@ import { defineComponent } from "vue";
 
 export default defineComponent({
   name: "Frame",
+  data() {
+    return {
+      input_dir_path: "",
+      output_dir_path: "",
+      methods_checked: null,
+      functions_checked: null,
+    }
+  },
+  methods: {
+    test(event) {
+      alert("Test called");
+      this.methods_checked === true;
+      this.functions_checked === true;
+      console.log(this.input_dir_path);
+      console.log(this.output_dir_path);
+    }
+  }
 });
+
 </script>
 
 <style>
@@ -84,7 +99,7 @@ export default defineComponent({
 }
 
 .frame .overlap-wrapper {
-  background-color: #ffffff;
+  background-color: #6e679b;
   height: 474px;
   width: 551px;
 }
@@ -165,7 +180,7 @@ export default defineComponent({
   position: absolute;
   text-align: center;
   top: 2px;
-  width: 83px;
+  width: 8px;
 }
 
 .frame .rectangle {
@@ -174,10 +189,10 @@ export default defineComponent({
   border-color: #653974;
   border-radius: 22px;
   height: 22px;
-  left: 15px;
+  left: 13px;
   position: absolute;
-  top: 7px;
-  width: 26px;
+  top: 3px;
+  width: 22px;
 }
 
 .frame .functions {
@@ -252,7 +267,7 @@ export default defineComponent({
   overflow: hidden;
   padding: 12px 16px;
   position: relative;
-  width: 100%;
+  width: 80;
 }
 
 .frame .text-wrapper-4 {
@@ -350,6 +365,31 @@ export default defineComponent({
 .app-container {
   background-color: #6e679b;
   margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
   overflow: hidden;
+}
+
+html, body {
+  background-color: #6e679b;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.addition-options-checkbox {
+  margin-left: 5;
+  margin: 2;
+  padding: 0;
+  width: 50%;
+  height: 50%;
+}
+
+.form {
+  width: 40;
+  size: 5;
 }
 </style>
