@@ -82,14 +82,16 @@ export default defineComponent({
     }
   },
   mounted() {
-    window.electron.ipcRenderer.on('file_path', (event, type, path) => {
+    window.electron.ipcRenderer.on('file_path', (_event, type, path) => {
       if (type === 0) {
         this.input_dir_path = path;
       } else {
         this.output_dir_path = path;
       }
+    }),
+    window.electron.ipcRenderer.on('completion', (_event) => {
       this.gen_text = 'Generate';
-    });
+    })
   },
   methods: {
     generate() {

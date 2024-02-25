@@ -1,9 +1,8 @@
-import { app, shell, dialog, BrowserWindow, ipcMain, ipcRenderer } from 'electron'
+import { app, shell, dialog, BrowserWindow, ipcMain } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
 import { spawn } from 'child_process'
-import fs from 'fs'
 
 function createWindow(): void {
   // Create the browser window.
