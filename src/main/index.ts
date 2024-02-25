@@ -8,8 +8,8 @@ function createWindow(): void {
   const mainWindow = new BrowserWindow({
     show: false,
     useContentSize: true,
-    width: 474,
-    height: 551,
+    // width: 474,
+    // height: 551,
     autoHideMenuBar: true,
     resizable: false,
     backgroundColor: "6e679b",

@@ -84,14 +84,14 @@ export default defineComponent({
 }
 
 .frame .overlap-wrapper {
-  background-color: #6e679b;
+  background-color: #ffffff;
   height: 474px;
   width: 551px;
 }
 
 .frame .overlap {
   background-color: #6e679b;
-  height: 474px;
+  height: 47px;
   position: relative;
 }
 
@@ -345,5 +345,11 @@ export default defineComponent({
   top: 12px;
   white-space: nowrap;
   width: 158px;
+}
+
+.app-container {
+  background-color: #6e679b;
+  margin: 0;
+  overflow: hidden;
 }
 </style>
